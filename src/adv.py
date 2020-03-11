@@ -1,10 +1,10 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+    'outside':  Room("Outside Cave Entrance", "North of you, the cave mount beckons"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -36,16 +36,33 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
+player = Player('Olamide', room['outside'])
 
+choice_options = {
+    "n": "north",
+    "s": "south",
+    "e": "east",
+    "w": "west",
+    "q": "quit"
+}
+
+
+def welcome_message():
+    welcome_message = (
+        f'Welcome {player.name}, you are in {player.current_room}')
+    print(welcome_message)
 # Make a new player object that is currently in the 'outside' room.
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+
+def show_messages():
+    print(f'{player.current_room.name}. {player.current_room.description}')
+
+
+def get_player_choice():
+    choice = input('Explore the cave: Go n,s,e,w, or q')
+    return choice_options[str(choice)]
+
+
+welcome_message()
+show_messages()
+get_player_choice()
