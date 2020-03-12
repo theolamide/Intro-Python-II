@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 import os
 
 # Declare all the rooms
@@ -34,18 +35,16 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+room['outside'].items = [Item('key', 'This opens the door to the cave'), Item(
+    'Rock', 'This is is a toy')]
+
 #
 # Main
 #
 player = Player('Olamide', room['outside'])
 
-choice_options = {
-    "n": "north",
-    "s": "south",
-    "e": "east",
-    "w": "west",
-    "q": "quit"
-}
+movement_options = ["north", "south", "east", "west", "quit"]
+action_options = ["take", "drop"]
 
 
 def welcome_message():
@@ -56,33 +55,37 @@ def welcome_message():
 
 
 def show_messages():
-    # os.system('cls')
     print(f'{player.current_room.name}. {player.current_room.description}')
+    player.current_room.displayItemsList()
 
 
 def get_player_choice():
-    choice = input('Explore the cave: Go n,s,e,w, or q')
-    if choice in choice_options:
-        return choice_options[str(choice)]
+    return input('Explore the cave: Go north, south, east, west, or quit')
+
+
+def game_actions(input):
+
+    # What kind of action
+    split = input.split(" ")
+    print(split)
+
+    # Check Length is split
+    if len(split) == 2:
+        # Perform Action
+        print(f"Performing action {split[0]}")
+    elif len(split) == 1:
+        if input in movement_options:
+            player.move(input)
+        else:
+            print("\n Invalid Choice")
     else:
-        print('invalid choice')
+        print("\n Invalid Choice")
 
-
-def user_navigation(user_input):
-    print("Your Choice", user_input)
-    if user_input == 'north' and player.current_room.n_to != None:
-        player.current_room = player.current_room.n_to
-
-    elif user_input == 'south' and player.current_room.s_to != None:
-        player.current_room = player.current_room.s_to
-
-    elif user_input == 'east' and player.current_room.e_to != None:
-        player.current_room = player.current_room.e_to
-
-    elif user_input == 'west' and player.current_room.w_to != None:
-        player.current_room = player.current_room.w_to
+    if input in movement_options:
+        player.move(input)
     else:
-        print('Error')
+        print('\ninvalid choice')
+        return
 
 
 welcome_message()
@@ -91,7 +94,7 @@ user_choice = get_player_choice()
 print(user_choice)
 
 while user_choice != 'quit':
-    user_navigation(user_choice)
+    game_actions(user_choice)
     show_messages()
     user_choice = get_player_choice()
 
