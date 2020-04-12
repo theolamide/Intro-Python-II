@@ -22,3 +22,6 @@ class Room():
             print(f'Items in this room: {output}')
         elif len(self.items) == 1:
             print(f'The only item in this room is: {self.items[0]}')
+
+    def removeItem(self, item):
+        self.items.remove(item)

@@ -43,7 +43,7 @@ room['outside'].items = [Item('key', 'This opens the door to the cave'), Item(
 #
 player = Player('Olamide', room['outside'])
 
-movement_options = ["north", "south", "east", "west", "quit"]
+movement_options = ["north", "south", "east", "west", "inventory", "quit"]
 action_options = ["take", "drop"]
 
 
@@ -72,20 +72,24 @@ def game_actions(input):
     # Check Length is split
     if len(split) == 2:
         # Perform Action
-        print(f"Performing action {split[0]}")
+        action = split[0]
+        item = split[1]
+        if action == action_options[0]:
+            for i in player.current_room.items:
+                if i.name == item:
+                    print(
+                        f"Found {item} in {player.current_room} and it is now in you inventory")
+                    player.getItem(i)
+                    player.current_room.removeItem(i)
+
     elif len(split) == 1:
         if input in movement_options:
             player.move(input)
         else:
             print("\n Invalid Choice")
+
     else:
         print("\n Invalid Choice")
-
-    if input in movement_options:
-        player.move(input)
-    else:
-        print('\ninvalid choice')
-        return
 
 
 welcome_message()
